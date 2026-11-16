@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог настольных игр — Личный кабинет</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/profile.js" defer></script>
+    <script src="js/cart.js" defer></script>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="Логотип сайта" width="48" height="48"><span>Каталог настольных игр</span></a>
+    <nav aria-label="Основная" class="main-nav">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="cart.html">Корзина <span data-cart-count>0</span></a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+        <a href="profile.html" class="profile-link active" title="Личный кабинет" aria-label="Личный кабинет">&#128100;</a>
+    </nav>
+</header>
+
+<main>
+    <h1 class="page-title">Личный кабинет</h1>
+
+    <!-- Блок авторизации -->
+    <section id="auth-section" style="display: none; max-width: 500px; margin: 0 auto; padding: 20px;">
+        <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08);">
+            
+            <!-- Форма Входа -->
+            <div id="login-form-container">
+                <h2 style="margin-bottom: 20px; color: #6b2fa0; text-align: center;">Вход</h2>
+                <input type="text" id="login-username" placeholder="Логин" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
+                <input type="password" id="login-password" placeholder="Пароль" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
+                <button type="button" class="btn" id="login-btn" style="width: 100%;">Войти</button>
+                
+                <p style="text-align: center; margin-top: 20px; font-size: 0.95rem;">
+                    Нет аккаунта? <a href="#" id="show-register" style="color: #6b2fa0; font-weight: bold; text-decoration: none;">Зарегистрироваться</a>
+                </p>
+            </div>
+
+            <!-- Форма Регистрации (скрыта) -->
+            <div id="register-form-container" style="display: none;">
+                <h2 style="margin-bottom: 20px; color: #6b2fa0; text-align: center;">Регистрация</h2>
+                <input type="text" id="reg-username" placeholder="Придумайте логин (от 3 символов)" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
+                <input type="password" id="reg-password" placeholder="Придумайте пароль (от 6 символов)" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
+                <button type="button" class="btn" id="register-btn" style="width: 100%; background: #2e7d32;">Зарегистрироваться</button>
+                
+                <p style="text-align: center; margin-top: 20px; font-size: 0.95rem;">
+                    Уже есть аккаунт? <a href="#" id="show-login" style="color: #6b2fa0; font-weight: bold; text-decoration: none;">Войти</a>
+                </p>
+            </div>
+            
+            <p id="auth-error" style="color: red; display: none; text-align: center; margin-top: 20px; font-weight: bold;"></p>
+        </div>
+    </section>
+
+    <!-- Блок профиля -->
+    <section id="profile-section" style="display: none; max-width: 800px; margin: 0 auto; background: #e8f5e9; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08);">
+        <h2 style="color: #2e7d32; margin-bottom: 10px;">Вы вошли как: <span id="profile-username"></span></h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">История заказов:</h3>
+        <ul id="my-orders-list" style="margin-left: 20px; margin-bottom: 25px; font-size: 1.1rem;">
+        </ul>
+        
+        <button type="button" class="btn" id="logout-btn" style="background: #c62828;">Выйти из аккаунта</button>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Каталог настольных игр | <a href="contacts.html">Связаться с нами</a></p>
+</footer>
+
+</body>
+</html>

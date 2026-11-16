@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог настольных игр — Каталог</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Подключаем скрипты -->
+    <script src="js/currency.js" defer></script>
+    <script src="js/catalog.js" defer></script>
+    <script src="js/cart.js" defer></script>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="Логотип сайта" width="48" height="48"><span>Каталог настольных игр</span></a>
+    <nav aria-label="Основная" class="main-nav">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="catalog.html" class="active" aria-current="page">Каталог</a></li>
+            <li><a href="cart.html">Корзина <span data-cart-count>0</span></a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+        <a href="profile.html" class="profile-link" title="Личный кабинет" aria-label="Личный кабинет">&#128100;</a>
+    </nav>
+</header>
+
+<main>
+    <h1 class="page-title">Каталог игр</h1>
+
+    <section aria-labelledby="filter-title">
+        <h2 id="filter-title">Подбор игр</h2>
+        <!-- Форма фильтра: изменения применяются сразу, без перезагрузки (скрипт catalog.js) -->
+        <form id="catalog-filter" class="catalog-tools" action="catalog.html" method="get">
+            <label>
+                Число игроков
+                <select name="players">
+                    <option value="">Любое</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 и больше</option>
+                </select>
+            </label>
+            <label>
+                Длительность партии
+                <select name="time">
+                    <option value="">Любая</option>
+                    <option value="30">До 30 минут</option>
+                    <option value="60">30–60 минут</option>
+                    <option value="90">Больше часа</option>
+                </select>
+            </label>
+            <label>
+                Сортировка
+                <select name="sort">
+                    <option value="name">По названию</option>
+                    <option value="price-asc">Сначала дешевле</option>
+                    <option value="price-desc">Сначала дороже</option>
+                </select>
+            </label>
+        </form>
+    </section>
+
+    <section aria-labelledby="all-title">
+        <h2 id="all-title">Все игры</h2>
+
+        <!-- Курсы ЦБ РФ: статус загрузки или ошибка -->
+        <p id="rates-status" class="catalog-status" role="status" hidden></p>
+        <div class="catalog-status">
+            <button id="rates-retry" type="button" class="btn" hidden>Повторить загрузку курсов</button>
+        </div>
+
+        <!-- Количество найденных игр: aria-live сообщает об изменениях программам экранного доступа -->
+        <p id="results-count" class="results" aria-live="polite"></p>
+        <p id="no-results" class="no-results" hidden>По выбранным условиям игр не нашлось. Попробуйте изменить фильтр.</p>
+
+        <!-- СЮДА JAVASCRIPT БУДЕТ ВСТАВЛЯТЬ КАРТОЧКИ ИЗ БАЗЫ ДАННЫХ -->
+        <div id="catalog-list" class="cards">
+            <!-- Карточки загрузятся автоматически из Python-сервера -->
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Каталог настольных игр | <a href="contacts.html">Связаться с нами</a></p>
+</footer>
+
+</body>
+</html>

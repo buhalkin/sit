@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог настольных игр — Главная</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/cart.js" defer></script>
+    <script src="js/index.js" defer></script> <!-- ЭТА СТРОКА ОЧЕНЬ ВАЖНА -->
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="Логотип сайта" width="48" height="48"><span>Каталог настольных игр</span></a>
+    <nav aria-label="Основная" class="main-nav">
+        <ul>
+            <li><a href="index.html" class="active" aria-current="page">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="cart.html">Корзина <span data-cart-count>0</span></a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+        <a href="profile.html" class="profile-link" title="Личный кабинет" aria-label="Личный кабинет">&#128100;</a>
+    </nav>
+</header>
+
+<main>
+    <div class="hero">
+        <h1>Мир настольных игр</h1>
+        <p>Более 500 игр для семьи, друзей и коллективов</p>
+        <a href="catalog.html" class="btn">Перейти в каталог →</a>
+    </div>
+
+    <section>
+        <h2>Хиты продаж</h2>
+        <p class="intro">Популярные игры. Подробности — на странице каждой игры, полный список — в каталоге.</p>
+        
+        <!-- Контейнер для карточек -->
+        <div class="cards" id="index-catalog-list">
+            <!-- Сюда JS вставит карточки -->
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Каталог настольных игр | <a href="contacts.html">Связаться с нами</a></p>
+</footer>
+
+</body>
+</html>

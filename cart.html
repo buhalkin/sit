@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог настольных игр — Корзина</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/cart.js" defer></script>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo"><img src="images/logo.svg" alt="Логотип сайта" width="48" height="48"><span>Каталог настольных игр</span></a>
+    <nav aria-label="Основная" class="main-nav">
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="cart.html" class="active" aria-current="page">Корзина <span data-cart-count>0</span></a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+        <!-- Используем HTML-код символа &#128100; (это тот же человечек, но как текст) -->
+        <a href="profile.html" class="profile-link" title="Личный кабинет" aria-label="Личный кабинет">&#128100;</a>
+    </nav>
+</header>
+
+<main>
+    <h1 class="page-title">Корзина</h1>
+
+    <section aria-labelledby="cart-title">
+        <h2 id="cart-title">Выбранные игры</h2>
+        <table class="cart-table">
+            <caption class="visually-hidden">Состав корзины: игры, количество, цена и сумма</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Игра</th>
+                    <th scope="col" class="num">Количество</th>
+                    <th scope="col" class="num">Цена</th>
+                    <th scope="col" class="num">Сумма</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items"></tbody>
+            <tfoot>
+                <tr>
+                    <th scope="row" colspan="3">Итого</th>
+                    <td id="cart-total" class="num" data-label="Итого">0 ₽</td>
+                </tr>
+            </tfoot>
+        </table>
+        <p class="results"><button type="button" class="btn" id="checkout-btn">Оформить заказ</button></p>
+        <p class="results"><a href="catalog.html" class="back-link">← Вернуться в каталог</a></p>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 Каталог настольных игр | <a href="contacts.html">Связаться с нами</a></p>
+</footer>
+
+</body>
+</html>
