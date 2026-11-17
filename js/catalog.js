@@ -5,7 +5,8 @@ const countBox = document.querySelector('#results-count');
 const noResultsBox = document.querySelector('#no-results');
 const ratesStatus = document.querySelector('#rates-status');
 const retryRatesBtn = document.querySelector('#rates-retry');
- 
+const searchInput = document.querySelector('#search-input'); // <-- НОВОЕ: Поле поиска
+
 let cards = []; 
 
 const TIME_FILTERS = {
@@ -20,12 +21,18 @@ const SORTERS = {
   'price-desc': (a, b) => Number(b.dataset.price || 0) - Number(a.dataset.price || 0),
 };
  
-function matchesFilters(card, players, time) {
+// ФУНКЦИЯ ФИЛЬТРАЦИИ (добавлено условие поиска по тексту)
+function matchesFilters(card, players, time, searchQuery) {
   const minPlayers = Number(card.dataset.minPlayers);
   const maxPlayers = Number(card.dataset.maxPlayers);
   const playersOk = players === 0 || (players === 5 ? maxPlayers >= 5 : players >= minPlayers && players <= maxPlayers);
   const timeOk = time === 0 || TIME_FILTERS[time](Number(card.dataset.time));
-  return playersOk && timeOk;
+  
+  // Проверка по поиску (если введено что-то)
+  const name = (card.dataset.name || '').toLowerCase();
+  const searchOk = searchQuery === '' || name.includes(searchQuery);
+  
+  return playersOk && timeOk && searchOk;
 }
  
 function applyFilters() {
@@ -34,9 +41,12 @@ function applyFilters() {
   const players = Number(data.get('players'));
   const time = Number(data.get('time'));
   const sortType = data.get('sort') || 'name';
+  
+  // Получаем текст поиска
+  const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
  
   const visible = cards
-    .filter((card) => matchesFilters(card, players, time))
+    .filter((card) => matchesFilters(card, players, time, searchQuery))
     .sort(SORTERS[sortType]);
  
   cards.forEach((card) => (card.hidden = true));
@@ -50,6 +60,7 @@ function applyFilters() {
 }
  
 async function showRates() {
+  // ... этот блок у вас работает, оставляем без изменений ...
   if (!ratesStatus) return;
   ratesStatus.textContent = 'Загружаем курсы ЦБ РФ…';
   ratesStatus.hidden = false;
@@ -80,10 +91,8 @@ async function loadCatalog() {
     
     list.innerHTML = ''; 
 
-    // Исправлено: 'Ужас Аркхэма' (через К)
     const hiddenGames = ['Мачи Коро', 'Ужас Аркхэма'];
 
-    // ВСЕ 15 ИГР (без Мачи Коро и Ужаса Аркхэма)
     const gameImages = {
       'Азул': 'azul',
       'Колонизаторы': 'colonizers',
@@ -121,7 +130,6 @@ async function loadCatalog() {
     };
 
     products.forEach((game) => {
-      // Теперь "Ужас Аркхэма" точно скроется
       if (hiddenGames.includes(game.name)) return;
 
       const article = document.createElement('article');
@@ -170,5 +178,8 @@ async function loadCatalog() {
 if (filterForm) filterForm.addEventListener('change', applyFilters); 
 if (filterForm) filterForm.addEventListener('submit', (event) => event.preventDefault()); 
 if (retryRatesBtn) retryRatesBtn.addEventListener('click', showRates); 
+
+// ДОБАВЛЯЕМ ОБРАБОТЧИК ВВОДА В ПОИСК (чтобы искало при каждом нажатии клавиши)
+if (searchInput) searchInput.addEventListener('input', applyFilters);
  
 loadCatalog();
