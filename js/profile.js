@@ -182,7 +182,7 @@ document.querySelector('#register-btn')?.addEventListener('click', async () => {
     loginContainer.style.display = 'block';
     registerContainer.style.display = 'none';
     if (errorBlock) {
-        errorBlock.style.display = 'none'; // <-- ВОТ ЭТО ГЛАВНОЕ ИСПРАВЛЕНИЕ
+        errorBlock.style.display = 'none';
         errorBlock.textContent = '';       // Очищаем текст ошибки
     }
     
