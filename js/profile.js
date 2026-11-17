@@ -46,7 +46,7 @@ async function loadMyOrders() {
   if (!list) return;
 
   try {
-    const response = await fetch('https://sit-rx6i.onrender.com/my-orders', {
+    const response = await fetch('https://sit-rx6i.onrender.com/api/my-orders', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error('Ошибка загрузки');
