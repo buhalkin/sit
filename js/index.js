@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Запрашиваем игры у нашего Python-сервера
-        const response = await fetch('https://sit-rx6i.onrender.com');
+        const response = await fetch('https://sit-rx6i.onrender.com/api/products');
         if (!response.ok) throw new Error('Ошибка сервера');
         
         const products = await response.json();
