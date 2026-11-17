@@ -81,7 +81,7 @@ document.querySelector('#login-btn')?.addEventListener('click', async () => {
     formData.append('username', usernameInput);
     formData.append('password', passwordInput);
 
-    const response = await fetch('http://127.0.0.1:8000/api/login', {
+    const response = await fetch('https://sit-rx6i.onrender.com/api/login', {
       method: 'POST',
       body: formData
     });
@@ -115,7 +115,7 @@ document.querySelector('#register-btn')?.addEventListener('click', async () => {
   }
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/register', {
+    const response = await fetch('https://sit-rx6i.onrender.com/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: usernameInput, password: passwordInput })
