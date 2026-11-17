@@ -99,6 +99,30 @@ section h2, .page-title { font-size: 2rem; color: #6b2fa0; text-align: center; m
 .cart-table .cart-remove { margin-left: 8px; padding: 5px 11px; border: 1px solid #e5aaa5; border-radius: 16px; background: #fff5f4; color: #b3261e; font-size: .85rem; font-weight: 600; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
 .cart-table .cart-remove:hover { border-color: #b3261e; background: #b3261e; color: #fff; }
 
+/* Стили для поля поиска, чтобы оно было как выпадающие списки */
+.catalog-tools input[type="text"] {
+    width: 100%;
+    padding: 10px 12px; /* Отступы внутри поля */
+    border: 1px solid #ccc; /* Рамка */
+    border-radius: 8px; /* Скругление углов */
+    font-size: 16px; /* Размер шрифта */
+    font-family: inherit; /* Наследуем шрифт сайта */
+    background-color: #fff;
+    color: #333;
+    box-sizing: border-box; /* Чтобы ширина учитывала отступы */
+    height: 46px; /* Высота, чтобы совпадала с select */
+}
+
+/* Эффект при наведении и фокусе */
+.catalog-tools input[type="text"]:focus {
+    outline: none;
+    border-color: #8e44ad; /* Цвет как у вашего акцента (фиолетовый) */
+    box-shadow: 0 0 0 2px rgba(142, 68, 173, 0.2); /* Легкое свечение */
+}
+
+.catalog-tools input[type="text"]::placeholder {
+    color: #999;
+}
 /* Счётчик корзины в меню */
 nav [data-cart-count] { display: inline-grid; place-items: center; min-width: 1.5rem; height: 1.5rem; margin-left: 4px; padding: 0 5px; border-radius: 999px; background: #fff; color: #6b2fa0; font-size: .8rem; font-weight: 700; line-height: 1; vertical-align: middle; font-variant-numeric: tabular-nums; }
 
