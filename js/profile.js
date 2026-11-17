@@ -136,64 +136,77 @@ document.querySelector('#login-btn')?.addEventListener('click', async () => {
 });
 
 // --- РЕГИСТРАЦИЯ ---
-document.querySelector('#register-btn')?.addEventListener('click', async () => {
-  const usernameInput = document.querySelector('#reg-username').value.trim();
-  const passwordInput = document.querySelector('#reg-password').value;
-  
-  // Финальная проверка перед отправкой
-  if (usernameInput.length < 3) {
-    if (errorBlock) { 
-        errorBlock.textContent = 'Логин должен быть не менее 3 символов'; 
-        errorBlock.style.color = 'red';
-        errorBlock.style.display = 'block'; 
-    }
-    return;
-  }
-  if (passwordInput.length < 6) {
-    if (errorBlock) { 
-        errorBlock.textContent = 'Пароль должен быть не менее 6 символов'; 
-        errorBlock.style.color = 'red';
-        errorBlock.style.display = 'block'; 
-    }
-    return;
-  }
+const registerBtn = document.querySelector('#register-btn'); // Находим кнопку
 
-  try {
-    const response = await fetch('https://sit-rx6i.onrender.com/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: usernameInput, password: passwordInput })
-    });
+if (registerBtn) {
+  registerBtn.addEventListener('click', async () => {
+    const usernameInput = document.querySelector('#reg-username').value.trim();
+    const passwordInput = document.querySelector('#reg-password').value;
+    
+    // Финальная проверка перед отправкой
+    if (usernameInput.length < 3) {
+      if (errorBlock) { 
+          errorBlock.textContent = 'Логин должен быть не менее 3 символов'; 
+          errorBlock.style.color = 'red';
+          errorBlock.style.display = 'block'; 
+      }
+      return;
+    }
+    if (passwordInput.length < 6) {
+      if (errorBlock) { 
+          errorBlock.textContent = 'Пароль должен быть не менее 6 символов'; 
+          errorBlock.style.color = 'red';
+          errorBlock.style.display = 'block'; 
+      }
+      return;
+    }
 
-    // Если сервер вернул ошибку
-    if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.detail || 'Ошибка при регистрации');
+    // 1. БЛОКИРУЕМ КНОПКУ
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Отправка...'; // Меняем текст для наглядности
+    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем старые ошибки
+
+    try {
+      const response = await fetch('https://sit-rx6i.onrender.com/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usernameInput, password: passwordInput })
+      });
+
+      // Если сервер вернул ошибку
+      if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.detail || 'Ошибка при регистрации');
+      }
+      
+      // УСПЕХ: очищаем поля и скрываем ошибку
+      alert('Регистрация успешна! Теперь вы можете войти.');
+      
+      document.querySelector('#reg-username').value = '';
+      document.querySelector('#reg-password').value = '';
+      document.querySelector('#login-username').value = usernameInput;
+      
+      // ПЕРЕКЛЮЧАЕМ ФОРМЫ И ПРЯЧЕМ ОШИБКУ
+      loginContainer.style.display = 'block';
+      registerContainer.style.display = 'none';
+      if (errorBlock) {
+          errorBlock.style.display = 'none';
+          errorBlock.textContent = '';       
+      }
+      
+    } catch (error) {
+      if (errorBlock) { 
+          errorBlock.textContent = error.message; 
+          errorBlock.style.color = 'red';
+          errorBlock.style.display = 'block'; 
+      }
+    } finally {
+      // 2. ВОЗВРАЩАЕМ КНОПКУ В ИСХОДНОЕ СОСТОЯНИЕ
+      registerBtn.disabled = false;
+      registerBtn.textContent = 'Зарегистрироваться';
     }
-    
-    // УСПЕХ: очищаем поля и скрываем ошибку
-    alert('Регистрация успешна! Теперь вы можете войти.');
-    
-    document.querySelector('#reg-username').value = '';
-    document.querySelector('#reg-password').value = '';
-    document.querySelector('#login-username').value = usernameInput;
-    
-    // ПЕРЕКЛЮЧАЕМ ФОРМЫ И ПРЯЧЕМ ОШИБКУ
-    loginContainer.style.display = 'block';
-    registerContainer.style.display = 'none';
-    if (errorBlock) {
-        errorBlock.style.display = 'none';
-        errorBlock.textContent = '';       // Очищаем текст ошибки
-    }
-    
-  } catch (error) {
-    if (errorBlock) { 
-        errorBlock.textContent = error.message; 
-        errorBlock.style.color = 'red';
-        errorBlock.style.display = 'block'; 
-    }
-  }
-});
+  });
+}
 
 // --- ВЫХОД ---
 document.querySelector('#logout-btn')?.addEventListener('click', () => {
