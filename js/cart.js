@@ -352,7 +352,7 @@
 
     try {
         for (const item of cart) {
-            await fetch('http://127.0.0.1:8000/api/orders', {
+            await fetch('https://sit-rx6i.onrender.com/api/orders', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
