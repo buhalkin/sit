@@ -34,6 +34,13 @@
         <h2 id="filter-title">Подбор игр</h2>
         <!-- Форма фильтра: изменения применяются сразу, без перезагрузки (скрипт catalog.js) -->
         <form id="catalog-filter" class="catalog-tools" action="catalog.html" method="get">
+            
+            <!-- ДОБАВЛЕНО ПОЛЕ ПОИСКА -->
+            <label>
+                Поиск по названию
+                <input type="text" id="search-input" name="search" placeholder="Введите название игры...">
+            </label>
+
             <label>
                 Число игроков
                 <select name="players">
@@ -76,8 +83,6 @@
         <!-- Количество найденных игр: aria-live сообщает об изменениях программам экранного доступа -->
         <p id="results-count" class="results" aria-live="polite"></p>
         <p id="no-results" class="no-results" hidden>По выбранным условиям игр не нашлось. Попробуйте изменить фильтр.</p>
-
-        <!-- СЮДА JAVASCRIPT БУДЕТ ВСТАВЛЯТЬ КАРТОЧКИ ИЗ БАЗЫ ДАННЫХ -->
         <div id="catalog-list" class="cards">
             <!-- Карточки загрузятся автоматически из Python-сервера -->
         </div>
