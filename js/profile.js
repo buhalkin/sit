@@ -6,18 +6,49 @@ const showLoginBtn = document.querySelector('#show-login');
 const errorBlock = document.querySelector('#auth-error');
 
 showRegisterBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // Отменяем переход по ссылке "#"
+    e.preventDefault();
     loginContainer.style.display = 'none';
     registerContainer.style.display = 'block';
-    if (errorBlock) errorBlock.style.display = 'none';
+    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем ошибку при переходе
 });
 
 showLoginBtn.addEventListener('click', (e) => {
     e.preventDefault();
     registerContainer.style.display = 'none';
     loginContainer.style.display = 'block';
-    if (errorBlock) errorBlock.style.display = 'none';
+    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем ошибку при переходе
 });
+
+// --- ВАЛИДАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ (чтобы писать про мало символов) ---
+const regUsernameInput = document.querySelector('#reg-username');
+const regPasswordInput = document.querySelector('#reg-password');
+
+function validateInputs() {
+    if (!regUsernameInput || !regPasswordInput) return;
+    
+    const userLen = regUsernameInput.value.trim().length;
+    const passLen = regPasswordInput.value.length;
+
+    if (userLen > 0 && userLen < 3) {
+        if (errorBlock) {
+            errorBlock.textContent = 'Логин должен быть не менее 3 символов';
+            errorBlock.style.display = 'block';
+            errorBlock.style.color = 'red';
+        }
+    } else if (passLen > 0 && passLen < 6) {
+        if (errorBlock) {
+            errorBlock.textContent = 'Пароль должен быть не менее 6 символов';
+            errorBlock.style.display = 'block';
+            errorBlock.style.color = 'red';
+        }
+    } else {
+        // Если всё в порядке, скрываем ошибку, пока пользователь печатает
+        if (errorBlock) errorBlock.style.display = 'none';
+    }
+}
+
+regUsernameInput?.addEventListener('input', validateInputs);
+regPasswordInput?.addEventListener('input', validateInputs);
 
 // --- ПРОВЕРКА АВТОРИЗАЦИИ ---
 function checkAuth() {
@@ -96,7 +127,11 @@ document.querySelector('#login-btn')?.addEventListener('click', async () => {
     if (errorBlock) errorBlock.style.display = 'none';
     
   } catch (error) {
-    if (errorBlock) { errorBlock.textContent = error.message; errorBlock.style.display = 'block'; }
+    if (errorBlock) { 
+        errorBlock.textContent = error.message; 
+        errorBlock.style.color = 'red';
+        errorBlock.style.display = 'block'; 
+    }
   }
 });
 
@@ -105,12 +140,21 @@ document.querySelector('#register-btn')?.addEventListener('click', async () => {
   const usernameInput = document.querySelector('#reg-username').value.trim();
   const passwordInput = document.querySelector('#reg-password').value;
   
+  // Финальная проверка перед отправкой
   if (usernameInput.length < 3) {
-    if (errorBlock) { errorBlock.textContent = 'Логин должен быть не менее 3 символов'; errorBlock.style.display = 'block'; }
+    if (errorBlock) { 
+        errorBlock.textContent = 'Логин должен быть не менее 3 символов'; 
+        errorBlock.style.color = 'red';
+        errorBlock.style.display = 'block'; 
+    }
     return;
   }
   if (passwordInput.length < 6) {
-    if (errorBlock) { errorBlock.textContent = 'Пароль должен быть не менее 6 символов'; errorBlock.style.display = 'block'; }
+    if (errorBlock) { 
+        errorBlock.textContent = 'Пароль должен быть не менее 6 символов'; 
+        errorBlock.style.color = 'red';
+        errorBlock.style.display = 'block'; 
+    }
     return;
   }
 
@@ -121,22 +165,33 @@ document.querySelector('#register-btn')?.addEventListener('click', async () => {
       body: JSON.stringify({ username: usernameInput, password: passwordInput })
     });
 
+    // Если сервер вернул ошибку
     if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         throw new Error(errData.detail || 'Ошибка при регистрации');
     }
     
+    // УСПЕХ: очищаем поля и скрываем ошибку
     alert('Регистрация успешна! Теперь вы можете войти.');
     
     document.querySelector('#reg-username').value = '';
     document.querySelector('#reg-password').value = '';
     document.querySelector('#login-username').value = usernameInput;
+    
+    // ПЕРЕКЛЮЧАЕМ ФОРМЫ И ПРЯЧЕМ ОШИБКУ
     loginContainer.style.display = 'block';
     registerContainer.style.display = 'none';
-    if (errorBlock) errorBlock.style.display = 'none';
+    if (errorBlock) {
+        errorBlock.style.display = 'none'; // <-- ВОТ ЭТО ГЛАВНОЕ ИСПРАВЛЕНИЕ
+        errorBlock.textContent = '';       // Очищаем текст ошибки
+    }
     
   } catch (error) {
-    if (errorBlock) { errorBlock.textContent = error.message; errorBlock.style.display = 'block'; }
+    if (errorBlock) { 
+        errorBlock.textContent = error.message; 
+        errorBlock.style.color = 'red';
+        errorBlock.style.display = 'block'; 
+    }
   }
 });
 
