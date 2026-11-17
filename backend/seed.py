@@ -32,7 +32,7 @@ def seed_db():
         {"name": "Древний Ужас", "price": 4990, "min_players": 1, "max_players": 8, "play_time": 180},
         {"name": "Кодовые имена", "price": 1490, "min_players": 4, "max_players": 8, "play_time": 15},
         {"name": "Гномы-вредители", "price": 1190, "min_players": 3, "max_players": 10, "play_time": 30},
-        {"name": "Мафия", "price": 1290, "min_players": 5, "max_players": 15, "play_time": 30}, # Добавили Мафию!
+        {"name": "Мафия", "price": 1290, "min_players": 5, "max_players": 15, "play_time": 30},
     ]
 
     for g in games:
