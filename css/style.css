@@ -123,6 +123,24 @@ section h2, .page-title { font-size: 2rem; color: #6b2fa0; text-align: center; m
 .catalog-tools input[type="text"]::placeholder {
     color: #999;
 }
+/* ===== Личный кабинет ===== */
+.auth-section { max-width: 500px; margin: 0 auto; padding: 20px; }
+.auth-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08); }
+.auth-title { margin-bottom: 20px; color: #6b2fa0; text-align: center; }
+.auth-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #767676; border-radius: 10px; font-size: 1rem; background: white; }
+.auth-input:focus { border-color: #6b2fa0; }
+.auth-submit { width: 100%; }
+.auth-submit--register { background: #2e7d32; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: .95rem; }
+.auth-switch a { color: #6b2fa0; font-weight: bold; text-decoration: none; }
+.auth-error { color: #c62828; text-align: center; margin-top: 20px; font-weight: bold; }
+
+/* Профиль */
+.profile-section { max-width: 800px; margin: 0 auto; background: #e8f5e9; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08); }
+.profile-title { color: #2e7d32; margin-bottom: 10px; }
+.profile-subtitle { margin: 25px 0 15px; }
+.orders-list { margin-left: 20px; margin-bottom: 25px; font-size: 1.1rem; }
+.logout-btn { background: #c62828; }
 /* Счётчик корзины в меню */
 nav [data-cart-count] { display: inline-grid; place-items: center; min-width: 1.5rem; height: 1.5rem; margin-left: 4px; padding: 0 5px; border-radius: 999px; background: #fff; color: #6b2fa0; font-size: .8rem; font-weight: 700; line-height: 1; vertical-align: middle; font-variant-numeric: tabular-nums; }
 
