@@ -29,7 +29,7 @@
 - Бэкенд: Python, FastAPI, SQLAlchemy
 - База данных: SQLite
 - Аутентификация: JWT, пароли хешируются bcrypt
-- Развёртывание: Render, Docker (опционально)
+- Развёртывание: Render (Web Service, сборка из GitHub)
 
 ## Структура проекта
 
@@ -56,7 +56,6 @@ backend/            серверная часть
   seed.py           наполнение базы данными
   requirements.txt  зафиксированные зависимости
 docs/README.md      этот файл
-Dockerfile          описание контейнера
 .env.example        пример переменных окружения
 ```
 
@@ -102,21 +101,12 @@ python -m http.server 5500
 
 Откройте http://localhost:5500/catalog.html
 
-## Запуск через Docker
-
-```bash
-docker build -t boardgames .
-docker run -p 8000:8000 --env-file .env boardgames
-```
-
-Приложение будет доступно на http://localhost:8000. Контейнер собирается с нуля: зависимости ставятся из `requirements.txt`, база наполняется при первом запуске.
-
 ## Развёртывание на Render
 
 1. Загрузите проект на GitHub. Файлы `.env` и `test.db` в репозиторий не добавляются (они в `.gitignore`).
 2. На render.com создайте **New → Web Service** и подключите репозиторий.
 3. Настройки сервиса:
-   - Runtime: Python (или Docker, если используется Dockerfile)
+   - Runtime: Python 3
    - Build Command: `pip install -r backend/requirements.txt`
    - Start Command: `cd backend && python seed.py && uvicorn main:app --host 0.0.0.0 --port $PORT`
 4. В разделе **Environment** добавьте переменные из таблицы выше (`SECRET_KEY`, `DATABASE_URL` и др.).
@@ -183,10 +173,10 @@ docker run -p 8000:8000 --env-file .env boardgames
 
 - Зависимости зафиксированы в `requirements.txt`.
 - Секреты и параметры подключения вынесены в переменные окружения (`.env.example` в репозитории, `.env` нет).
-- Запуск описан в `Dockerfile`, контейнер собирается и запускается на чистой машине.
+- Запуск описан в README пошагово (локально и на Render): приложение собирается и запускается на чистой машине по инструкции. Docker не используется.
 - Приложение размещено на Render и открывается по адресу в разделе «Ссылки».
 - HTTPS включён, сертификат выдаётся автоматически.
-- В README есть адрес приложения, инструкции запуска (локально и через Docker), тестовая учётная запись.
+- В README есть адрес приложения, инструкции запуска (локально и на Render), тестовая учётная запись.
 
 ## Как проверить
 
