@@ -29,46 +29,49 @@
     <h1 class="page-title">Личный кабинет</h1>
 
     <!-- Блок авторизации -->
-    <section id="auth-section" style="display: none; max-width: 500px; margin: 0 auto; padding: 20px;">
-        <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08);">
-            
+    <section id="auth-section" class="auth-section" hidden>
+        <div class="auth-card">
+
             <!-- Форма Входа -->
             <div id="login-form-container">
-                <h2 style="margin-bottom: 20px; color: #6b2fa0; text-align: center;">Вход</h2>
-                <input type="text" id="login-username" placeholder="Логин" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
-                <input type="password" id="login-password" placeholder="Пароль" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
-                <button type="button" class="btn" id="login-btn" style="width: 100%;">Войти</button>
-                
-                <p style="text-align: center; margin-top: 20px; font-size: 0.95rem;">
-                    Нет аккаунта? <a href="#" id="show-register" style="color: #6b2fa0; font-weight: bold; text-decoration: none;">Зарегистрироваться</a>
+                <h2 class="auth-title">Вход</h2>
+                <input type="text" id="login-username" name="login-username"
+                       placeholder="Логин" autocomplete="username" class="auth-input">
+                <input type="password" id="login-password" name="login-password"
+                       placeholder="Пароль" autocomplete="current-password" class="auth-input">
+                <button type="button" class="btn auth-submit" id="login-btn">Войти</button>
+
+                <p class="auth-switch">
+                    Нет аккаунта? <a href="#" id="show-register">Зарегистрироваться</a>
                 </p>
             </div>
 
             <!-- Форма Регистрации (скрыта) -->
-            <div id="register-form-container" style="display: none;">
-                <h2 style="margin-bottom: 20px; color: #6b2fa0; text-align: center;">Регистрация</h2>
-                <input type="text" id="reg-username" placeholder="Придумайте логин (от 3 символов)" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
-                <input type="password" id="reg-password" placeholder="Придумайте пароль (от 6 символов)" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 2px solid #767676; border-radius: 10px;">
-                <button type="button" class="btn" id="register-btn" style="width: 100%; background: #2e7d32;">Зарегистрироваться</button>
-                
-                <p style="text-align: center; margin-top: 20px; font-size: 0.95rem;">
-                    Уже есть аккаунт? <a href="#" id="show-login" style="color: #6b2fa0; font-weight: bold; text-decoration: none;">Войти</a>
+            <div id="register-form-container" hidden>
+                <h2 class="auth-title">Регистрация</h2>
+                <input type="text" id="reg-username" name="reg-username"
+                       placeholder="Придумайте логин (от 3 символов)" autocomplete="username" class="auth-input">
+                <input type="password" id="reg-password" name="reg-password"
+                       placeholder="Придумайте пароль (от 6 символов)" autocomplete="new-password" class="auth-input">
+                <button type="button" class="btn auth-submit auth-submit--register" id="register-btn">Зарегистрироваться</button>
+
+                <p class="auth-switch">
+                    Уже есть аккаунт? <a href="#" id="show-login">Войти</a>
                 </p>
             </div>
-            
-            <p id="auth-error" style="color: red; display: none; text-align: center; margin-top: 20px; font-weight: bold;"></p>
+
+            <p id="auth-error" class="auth-error" hidden></p>
         </div>
     </section>
 
     <!-- Блок профиля -->
-    <section id="profile-section" style="display: none; max-width: 800px; margin: 0 auto; background: #e8f5e9; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.08);">
-        <h2 style="color: #2e7d32; margin-bottom: 10px;">Вы вошли как: <span id="profile-username"></span></h2>
-        
-        <h3 style="margin-top: 25px; margin-bottom: 15px;">История заказов:</h3>
-        <ul id="my-orders-list" style="margin-left: 20px; margin-bottom: 25px; font-size: 1.1rem;">
-        </ul>
-        
-        <button type="button" class="btn" id="logout-btn" style="background: #c62828;">Выйти из аккаунта</button>
+    <section id="profile-section" class="profile-section" hidden>
+        <h2 class="profile-title">Вы вошли как: <span id="profile-username"></span></h2>
+
+        <h3 class="profile-subtitle">История заказов:</h3>
+        <ul id="my-orders-list" class="orders-list"></ul>
+
+        <button type="button" class="btn logout-btn" id="logout-btn">Выйти из аккаунта</button>
     </section>
 </main>
 
