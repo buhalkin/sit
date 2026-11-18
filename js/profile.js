@@ -1,49 +1,68 @@
+// --- УТИЛИТЫ ---
+const errorBlock = document.querySelector('#auth-error');
+
+function showError(message) {
+    if (!errorBlock) return;
+    errorBlock.textContent = message;
+    errorBlock.hidden = false;
+}
+
+function clearError() {
+    if (!errorBlock) return;
+    errorBlock.textContent = '';
+    errorBlock.hidden = true;
+}
+
+// Сброс поля + «отвязка» автозаполнения браузера для паролей
+function resetField(input) {
+    if (!input) return;
+    input.value = '';
+    if (input.type === 'password') {
+        input.type = 'text';
+        input.type = 'password';
+    }
+}
+
 // --- ПЕРЕКЛЮЧЕНИЕ ФОРМ ---
 const loginContainer = document.querySelector('#login-form-container');
 const registerContainer = document.querySelector('#register-form-container');
 const showRegisterBtn = document.querySelector('#show-register');
 const showLoginBtn = document.querySelector('#show-login');
-const errorBlock = document.querySelector('#auth-error');
 
-showRegisterBtn.addEventListener('click', (e) => {
+showRegisterBtn?.addEventListener('click', (e) => {
     e.preventDefault();
-    loginContainer.style.display = 'none';
-    registerContainer.style.display = 'block';
-    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем ошибку при переходе
+    clearError();
+    resetField(document.querySelector('#reg-username'));
+    resetField(document.querySelector('#reg-password'));
+    loginContainer.hidden = true;
+    registerContainer.hidden = false;
 });
 
-showLoginBtn.addEventListener('click', (e) => {
+showLoginBtn?.addEventListener('click', (e) => {
     e.preventDefault();
-    registerContainer.style.display = 'none';
-    loginContainer.style.display = 'block';
-    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем ошибку при переходе
+    clearError();
+    resetField(document.querySelector('#login-username'));
+    resetField(document.querySelector('#login-password'));
+    registerContainer.hidden = true;
+    loginContainer.hidden = false;
 });
 
-// --- ВАЛИДАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ (чтобы писать про мало символов) ---
+// --- ВАЛИДАЦИЯ В РЕАЛЬНОМ ВРЕМЕНИ ---
 const regUsernameInput = document.querySelector('#reg-username');
 const regPasswordInput = document.querySelector('#reg-password');
 
 function validateInputs() {
     if (!regUsernameInput || !regPasswordInput) return;
-    
+
     const userLen = regUsernameInput.value.trim().length;
     const passLen = regPasswordInput.value.length;
 
     if (userLen > 0 && userLen < 3) {
-        if (errorBlock) {
-            errorBlock.textContent = 'Логин должен быть не менее 3 символов';
-            errorBlock.style.display = 'block';
-            errorBlock.style.color = 'red';
-        }
+        showError('Логин должен быть не менее 3 символов');
     } else if (passLen > 0 && passLen < 6) {
-        if (errorBlock) {
-            errorBlock.textContent = 'Пароль должен быть не менее 6 символов';
-            errorBlock.style.display = 'block';
-            errorBlock.style.color = 'red';
-        }
+        showError('Пароль должен быть не менее 6 символов');
     } else {
-        // Если всё в порядке, скрываем ошибку, пока пользователь печатает
-        if (errorBlock) errorBlock.style.display = 'none';
+        clearError();
     }
 }
 
@@ -52,167 +71,150 @@ regPasswordInput?.addEventListener('input', validateInputs);
 
 // --- ПРОВЕРКА АВТОРИЗАЦИИ ---
 function checkAuth() {
-  const token = localStorage.getItem('token');
-  const username = localStorage.getItem('username');
-  const authSection = document.querySelector('#auth-section');
-  const profileSection = document.querySelector('#profile-section');
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    const authSection = document.querySelector('#auth-section');
+    const profileSection = document.querySelector('#profile-section');
 
-  if (token && username) {
-    if (authSection) authSection.style.display = 'none';
-    if (profileSection) {
-      profileSection.style.display = 'block';
-      document.querySelector('#profile-username').textContent = username;
-      loadMyOrders(); 
+    if (token && username) {
+        if (authSection) authSection.hidden = true;
+        if (profileSection) {
+            profileSection.hidden = false;
+            const nameEl = document.querySelector('#profile-username');
+            if (nameEl) nameEl.textContent = username;
+            loadMyOrders();
+        }
+    } else {
+        if (authSection) authSection.hidden = false;
+        if (profileSection) profileSection.hidden = true;
     }
-  } else {
-    if (authSection) authSection.style.display = 'block';
-    if (profileSection) profileSection.style.display = 'none';
-  }
 }
 
 // --- ЗАГРУЗКА ЗАКАЗОВ ---
 async function loadMyOrders() {
-  const token = localStorage.getItem('token');
-  const list = document.querySelector('#my-orders-list');
-  if (!list) return;
+    const token = localStorage.getItem('token');
+    const list = document.querySelector('#my-orders-list');
+    if (!list) return;
 
-  try {
-    const response = await fetch('https://sit-rx6i.onrender.com/api/my-orders', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (!response.ok) throw new Error('Ошибка загрузки');
-    
-    const orders = await response.json();
-    list.innerHTML = ''; 
+    try {
+        const response = await fetch('https://sit-rx6i.onrender.com/api/my-orders', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Ошибка загрузки');
 
-    if (orders.length === 0) {
-      list.innerHTML = '<li>У вас пока нет заказов.</li>';
-      return;
+        const orders = await response.json();
+        list.innerHTML = '';
+
+        if (orders.length === 0) {
+            list.innerHTML = '<li>У вас пока нет заказов.</li>';
+            return;
+        }
+
+        orders.forEach(order => {
+            const li = document.createElement('li');
+            li.textContent = `${order.product_name} — ${order.quantity} шт.`;
+            list.append(li);
+        });
+    } catch (error) {
+        list.innerHTML = '<li>Не удалось загрузить заказы.</li>';
     }
-
-    orders.forEach(order => {
-      const li = document.createElement('li');
-      li.textContent = `${order.product_name} — ${order.quantity} шт.`;
-      list.append(li);
-    });
-  } catch (error) {
-    list.innerHTML = '<li>Не удалось загрузить заказы.</li>';
-  }
 }
 
 // --- ВХОД ---
 document.querySelector('#login-btn')?.addEventListener('click', async () => {
-  const usernameInput = document.querySelector('#login-username').value.trim();
-  const passwordInput = document.querySelector('#login-password').value;
-  
-  if (!usernameInput || !passwordInput) return;
+    const usernameInput = document.querySelector('#login-username').value.trim();
+    const passwordInput = document.querySelector('#login-password').value;
 
-  try {
-    const formData = new URLSearchParams();
-    formData.append('username', usernameInput);
-    formData.append('password', passwordInput);
+    if (!usernameInput || !passwordInput) return;
 
-    const response = await fetch('https://sit-rx6i.onrender.com/api/login', {
-      method: 'POST',
-      body: formData
-    });
+    try {
+        const formData = new URLSearchParams();
+        formData.append('username', usernameInput);
+        formData.append('password', passwordInput);
 
-    if (!response.ok) throw new Error('Неверный логин или пароль');
-    
-    const data = await response.json();
-    localStorage.setItem('token', data.access_token);
-    localStorage.setItem('username', usernameInput);
-    
-    checkAuth();
-    if (errorBlock) errorBlock.style.display = 'none';
-    
-  } catch (error) {
-    if (errorBlock) { 
-        errorBlock.textContent = error.message; 
-        errorBlock.style.color = 'red';
-        errorBlock.style.display = 'block'; 
+        const response = await fetch('https://sit-rx6i.onrender.com/api/login', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Неверный логин или пароль');
+
+        const data = await response.json();
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('username', usernameInput);
+
+        // чистим поля, чтобы старый пароль не «залип» при следующем визите
+        resetField(document.querySelector('#login-username'));
+        resetField(document.querySelector('#login-password'));
+
+        clearError();
+        checkAuth();
+    } catch (error) {
+        showError(error.message);
     }
-  }
 });
 
 // --- РЕГИСТРАЦИЯ ---
-const registerBtn = document.querySelector('#register-btn'); // Находим кнопку
+const registerBtn = document.querySelector('#register-btn');
 
 if (registerBtn) {
-  registerBtn.addEventListener('click', async () => {
-    const usernameInput = document.querySelector('#reg-username').value.trim();
-    const passwordInput = document.querySelector('#reg-password').value;
-    
-    // Финальная проверка перед отправкой
-    if (usernameInput.length < 3) {
-      if (errorBlock) { 
-          errorBlock.textContent = 'Логин должен быть не менее 3 символов'; 
-          errorBlock.style.color = 'red';
-          errorBlock.style.display = 'block'; 
-      }
-      return;
-    }
-    if (passwordInput.length < 6) {
-      if (errorBlock) { 
-          errorBlock.textContent = 'Пароль должен быть не менее 6 символов'; 
-          errorBlock.style.color = 'red';
-          errorBlock.style.display = 'block'; 
-      }
-      return;
-    }
+    registerBtn.addEventListener('click', async () => {
+        const usernameInput = document.querySelector('#reg-username').value.trim();
+        const passwordInput = document.querySelector('#reg-password').value;
 
-    // 1. БЛОКИРУЕМ КНОПКУ
-    registerBtn.disabled = true;
-    registerBtn.textContent = 'Отправка...'; // Меняем текст для наглядности
-    if (errorBlock) errorBlock.style.display = 'none'; // Скрываем старые ошибки
+        if (usernameInput.length < 3) {
+            showError('Логин должен быть не менее 3 символов');
+            return;
+        }
+        if (passwordInput.length < 6) {
+            showError('Пароль должен быть не менее 6 символов');
+            return;
+        }
 
-    try {
-      const response = await fetch('https://sit-rx6i.onrender.com/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: usernameInput, password: passwordInput })
-      });
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Отправка...';
+        clearError();
 
-      // Если сервер вернул ошибку
-      if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.detail || 'Ошибка при регистрации');
-      }
-      
-      // УСПЕХ: очищаем поля и скрываем ошибку
-      alert('Регистрация успешна! Теперь вы можете войти.');
-      
-      document.querySelector('#reg-username').value = '';
-      document.querySelector('#reg-password').value = '';
-      document.querySelector('#login-username').value = usernameInput;
-      
-      // ПЕРЕКЛЮЧАЕМ ФОРМЫ И ПРЯЧЕМ ОШИБКУ
-      loginContainer.style.display = 'block';
-      registerContainer.style.display = 'none';
-      if (errorBlock) {
-          errorBlock.style.display = 'none';
-          errorBlock.textContent = '';       
-      }
-      
-    } catch (error) {
-      if (errorBlock) { 
-          errorBlock.textContent = error.message; 
-          errorBlock.style.color = 'red';
-          errorBlock.style.display = 'block'; 
-      }
-    } finally {
-      // 2. ВОЗВРАЩАЕМ КНОПКУ В ИСХОДНОЕ СОСТОЯНИЕ
-      registerBtn.disabled = false;
-      registerBtn.textContent = 'Зарегистрироваться';
-    }
-  });
+        try {
+            const response = await fetch('https://sit-rx6i.onrender.com/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: usernameInput, password: passwordInput })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || 'Ошибка при регистрации');
+            }
+
+            alert('Регистрация успешна! Теперь вы можете войти.');
+
+            // чистим поля регистрации (важно: resetField снимает автозаполнение)
+            resetField(document.querySelector('#reg-username'));
+            resetField(document.querySelector('#reg-password'));
+
+            // подставляем логин во вход, пароль оставляем пустым
+            const loginUser = document.querySelector('#login-username');
+            if (loginUser) loginUser.value = usernameInput;
+            resetField(document.querySelector('#login-password'));
+
+            loginContainer.hidden = false;
+            registerContainer.hidden = true;
+            clearError();
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            registerBtn.disabled = false;
+            registerBtn.textContent = 'Зарегистрироваться';
+        }
+    });
 }
 
 // --- ВЫХОД ---
 document.querySelector('#logout-btn')?.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('username');
-  checkAuth();
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    checkAuth();
 });
 
 checkAuth();
